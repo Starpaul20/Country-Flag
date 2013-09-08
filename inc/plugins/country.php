@@ -501,8 +501,7 @@ function country_run($post)
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
-	$post['country'] = "";
-	if($post['country'])
+	if(isset($post['country']))
 	{
 		$post['country'] = intval($post['country']);
 		$currentcountry = $country_cache[$post['country']];
@@ -683,7 +682,7 @@ function country_datacache_class()
 	}
 }
 
-// Add mood manage section in Admin CP
+// Add country manage section in Admin CP
 function country_admin_menu($sub_menu)
 {
 	global $lang;
