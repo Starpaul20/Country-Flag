@@ -41,6 +41,7 @@ $plugins->add_hook("usercp_profile_start", "country_select");
 $plugins->add_hook("usercp_do_profile_end", "country_do_select");
 $plugins->add_hook("member_register_start", "country_register");
 $plugins->add_hook("member_do_register_end", "country_do_register");
+$plugins->add_hook("memberlist_user", "country_memberlist");
 
 $plugins->add_hook("admin_formcontainer_output_row", "country_user_editing");
 $plugins->add_hook("admin_user_users_edit_commit", "country_user_editing_commit");
@@ -467,6 +468,7 @@ function country_activate()
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
 	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'country\']}');
 	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'country\']}');
+	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'profilelink\']}')."#i", '{$user[\'profilelink\']}{$user[\'country\']}');
 	find_replace_templatesets("member_register", "#".preg_quote('{$requiredfields}')."#i", '{$countryfield}{$requiredfields}');
 	find_replace_templatesets("member_profile", "#".preg_quote('{$online_status}')."#i", '{$online_status}<br /><strong>{$lang->country}:</strong> {$country}');
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$requiredfields}')."#i", '{$requiredcountryfield}{$requiredfields}');
@@ -488,6 +490,7 @@ function country_deactivate()
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
 	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'country\']}')."#i", '', 0);
 	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'country\']}')."#i", '', 0);
+	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'country\']}')."#i", '', 0);
 	find_replace_templatesets("member_register", "#".preg_quote('{$countryfield}')."#i", '', 0);
 	find_replace_templatesets("member_profile", "#".preg_quote('<br /><strong>{$lang->country}:</strong> {$country}')."#i", '', 0);
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$requiredcountryfield}')."#i", '', 0);
@@ -614,6 +617,26 @@ function country_do_register()
 		"country" => intval($mybb->input['country'])
 	);
 	$db->update_query("users", $update_country, "username ='{$mybb->input['username']}'");
+}
+
+// Show flag on member list
+function country_memberlist($user)
+{
+	global $db, $mybb, $lang, $cache;
+	$lang->load("country");
+	$country_cache = $cache->read("countries");
+
+	if($user['country'])
+	{
+		$user['country'] = intval($user['country']);
+		$currentcountry = $country_cache[$user['country']];
+
+		$currentcountry['name'] = $lang->parse($currentcountry['name']);
+
+		$user['country'] = "&nbsp;<img src=\"{$currentcountry['flag']}\" alt=\"{$currentcountry['name']}\" title=\"{$currentcountry['name']}\" />";
+	}
+
+	return $user;
 }
 
 // Admin CP user editing
