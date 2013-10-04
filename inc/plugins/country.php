@@ -31,6 +31,26 @@ if(my_strpos($_SERVER['PHP_SELF'], 'showthread.php'))
 	$templatelist .= 'postbit_country';
 }
 
+if(my_strpos($_SERVER['PHP_SELF'], 'member.php'))
+{
+	global $templatelist;
+	if(isset($templatelist))
+	{
+		$templatelist .= ',';
+	}
+	$templatelist .= 'global_country';
+}
+
+if(my_strpos($_SERVER['PHP_SELF'], 'memberlist.php'))
+{
+	global $templatelist;
+	if(isset($templatelist))
+	{
+		$templatelist .= ',';
+	}
+	$templatelist .= 'global_country';
+}
+
 // Tell MyBB when to run the hooks
 $plugins->add_hook("postbit", "country_run");
 $plugins->add_hook("postbit_pm", "country_run");
@@ -397,6 +417,15 @@ function country_activate()
 	$db->insert_query("templates", $insert_array);
 
 	$insert_array = array(
+		'title'		=> 'global_country',
+		'template'	=> $db->escape_string('<img src="{$country[\'flag\']}" alt="{$country[\'name\']}" title="{$country[\'name\']}" />'),
+		'sid'		=> '-1',
+		'version'	=> '',
+		'dateline'	=> TIME_NOW
+	);
+	$db->insert_query("templates", $insert_array);
+
+	$insert_array = array(
 		'title'		=> 'usercp_profile_country_required',
 		'template'	=> $db->escape_string('<tr>
 <td>
@@ -470,7 +499,7 @@ function country_activate()
 	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'country\']}');
 	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'profilelink\']}')."#i", '{$user[\'profilelink\']}{$user[\'country\']}');
 	find_replace_templatesets("member_register", "#".preg_quote('{$requiredfields}')."#i", '{$countryfield}{$requiredfields}');
-	find_replace_templatesets("member_profile", "#".preg_quote('{$online_status}')."#i", '{$online_status}<br /><strong>{$lang->country}:</strong> {$country}');
+	find_replace_templatesets("member_profile", "#".preg_quote('</strong></span>')."#i", '</strong></span>{$usercountry}');
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$requiredfields}')."#i", '{$requiredcountryfield}{$requiredfields}');
 	find_replace_templatesets("usercp_profile", "#".preg_quote('</table>
 </fieldset>
@@ -484,7 +513,7 @@ function country_deactivate()
 {
 	global $db;
 	$db->delete_query("settings", "name='countryrequired'");
-	$db->delete_query("templates", "title IN('postbit_country','usercp_profile_country_required','usercp_profile_country_optional','member_register_country')");
+	$db->delete_query("templates", "title IN('postbit_country','global_country','usercp_profile_country_required','usercp_profile_country_optional','member_register_country')");
 	rebuild_settings();
 
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
@@ -492,7 +521,7 @@ function country_deactivate()
 	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'country\']}')."#i", '', 0);
 	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'country\']}')."#i", '', 0);
 	find_replace_templatesets("member_register", "#".preg_quote('{$countryfield}')."#i", '', 0);
-	find_replace_templatesets("member_profile", "#".preg_quote('<br /><strong>{$lang->country}:</strong> {$country}')."#i", '', 0);
+	find_replace_templatesets("member_profile", "#".preg_quote('{$usercountry}')."#i", '', 0);
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$requiredcountryfield}')."#i", '', 0);
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$optionalcountryfield}')."#i", '', 0);
 }
@@ -522,23 +551,19 @@ function country_run($post)
 // Add country flag to profile
 function country_profile()
 {
-	global $db, $mybb, $lang, $templates, $cache, $country, $memprofile;
+	global $lang, $templates, $cache, $usercountry, $memprofile;
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
-	$country = "";
+	$usercountry = "";
 	if($memprofile['country'])
 	{
 		$memprofile['country'] = intval($memprofile['country']);
-		$currentcountry = $country_cache[$memprofile['country']];
+		$country = $country_cache[$memprofile['country']];
 
-		$currentcountry['name'] = $lang->parse($currentcountry['name']);
+		$country['name'] = $lang->parse($country['name']);
 
-		$country = "<img src=\"{$currentcountry['flag']}\" alt=\"{$currentcountry['name']}\" title=\"{$currentcountry['name']}\" />";
-	}
-	else
-	{
-		$country = $lang->not_specified;
+		eval("\$usercountry = \"".$templates->get("global_country")."\";");
 	}
 }
 
@@ -622,18 +647,18 @@ function country_do_register()
 // Show flag on member list
 function country_memberlist($user)
 {
-	global $db, $mybb, $lang, $cache;
+	global $lang, $cache, $templates;
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
 	if($user['country'])
 	{
 		$user['country'] = intval($user['country']);
-		$currentcountry = $country_cache[$user['country']];
+		$country = $country_cache[$user['country']];
 
-		$currentcountry['name'] = $lang->parse($currentcountry['name']);
+		$country['name'] = $lang->parse($country['name']);
 
-		$user['country'] = "&nbsp;<img src=\"{$currentcountry['flag']}\" alt=\"{$currentcountry['name']}\" title=\"{$currentcountry['name']}\" />";
+		eval("\$user['country'] = \"".$templates->get("global_country")."\";");
 	}
 
 	return $user;
