@@ -409,7 +409,7 @@ function country_activate()
 
 	$insert_array = array(
 		'title'		=> 'postbit_country',
-		'template'	=> $db->escape_string('<br />{$lang->country}: {$country}'),
+		'template'	=> $db->escape_string('<br />{$lang->country}: <img src="{$country[\'flag\']}" alt="{$country[\'name\']}" title="{$country[\'name\']}" />'),
 		'sid'		=> '-1',
 		'version'	=> '',
 		'dateline'	=> TIME_NOW
@@ -495,9 +495,9 @@ function country_activate()
 	$db->insert_query("templates", $insert_array);
 
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
-	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'country\']}');
-	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'country\']}');
-	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'profilelink\']}')."#i", '{$user[\'profilelink\']}{$user[\'country\']}');
+	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'usercountry\']}');
+	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'usercountry\']}');
+	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'profilelink\']}')."#i", '{$user[\'profilelink\']}{$user[\'usercountry\']}');
 	find_replace_templatesets("member_register", "#".preg_quote('{$requiredfields}')."#i", '{$countryfield}{$requiredfields}');
 	find_replace_templatesets("member_profile", "#".preg_quote('</strong></span>')."#i", '</strong></span>{$usercountry}');
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$requiredfields}')."#i", '{$requiredcountryfield}{$requiredfields}');
@@ -517,9 +517,9 @@ function country_deactivate()
 	rebuild_settings();
 
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
-	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'country\']}')."#i", '', 0);
-	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'country\']}')."#i", '', 0);
-	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'country\']}')."#i", '', 0);
+	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'usercountry\']}')."#i", '', 0);
+	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'usercountry\']}')."#i", '', 0);
+	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'usercountry\']}')."#i", '', 0);
 	find_replace_templatesets("member_register", "#".preg_quote('{$countryfield}')."#i", '', 0);
 	find_replace_templatesets("member_profile", "#".preg_quote('{$usercountry}')."#i", '', 0);
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$requiredcountryfield}')."#i", '', 0);
@@ -533,16 +533,15 @@ function country_run($post)
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
-	if(isset($post['country']))
+	$post['usercountry'] = "";
+	if(!empty($post['country']))
 	{
 		$post['country'] = intval($post['country']);
-		$currentcountry = $country_cache[$post['country']];
+		$country = $country_cache[$post['country']];
 
-		$currentcountry['name'] = $lang->parse($currentcountry['name']);
+		$country['name'] = $lang->parse($country['name']);
 
-		$country = "<img src=\"{$currentcountry['flag']}\" alt=\"{$currentcountry['name']}\" title=\"{$currentcountry['name']}\" />";
-
-		eval("\$post['country'] = \"".$templates->get('postbit_country')."\";");
+		eval("\$post['usercountry'] = \"".$templates->get('postbit_country')."\";");
 	}
 
 	return $post;
@@ -651,14 +650,15 @@ function country_memberlist($user)
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
-	if($user['country'])
+	$user['usercountry'] = "";
+	if(!empty($user['country']))
 	{
 		$user['country'] = intval($user['country']);
 		$country = $country_cache[$user['country']];
 
 		$country['name'] = $lang->parse($country['name']);
 
-		eval("\$user['country'] = \"".$templates->get("global_country")."\";");
+		eval("\$user['usercountry'] = \"".$templates->get("global_country")."\";");
 	}
 
 	return $user;
