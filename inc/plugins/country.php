@@ -437,7 +437,6 @@ function country_activate()
 <tr>
 <td>
 <select name="country">
-{$blank}
 {$countryoptions}
 </select>
 </td>
@@ -668,7 +667,7 @@ function country_memberlist($user)
 function country_user_editing($above)
 {
 	global $db, $mybb, $lang, $form;
-	$lang->load("country");
+	$lang->load("country", true);
 
 	if($above['title'] == $lang->other_options && $lang->other_options)
 	{
