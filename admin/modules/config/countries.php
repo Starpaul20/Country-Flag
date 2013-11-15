@@ -12,7 +12,7 @@ if(!defined("IN_MYBB"))
 
 $page->add_breadcrumb_item($lang->countries, "index.php?module=config-countries");
 
-$lang->load("country");
+$lang->load("country", true);
 
 if($mybb->input['action'] == "add")
 {
