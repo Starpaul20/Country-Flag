@@ -634,12 +634,12 @@ function country_register()
 
 function country_do_register()
 {
-	global $db, $mybb;
+	global $db, $mybb, $user_info;
 
 	$update_country = array(
 		"country" => intval($mybb->input['country'])
 	);
-	$db->update_query("users", $update_country, "username ='{$mybb->input['username']}'");
+	$db->update_query("users", $update_country, "uid ='{$user_info['uid']}'");
 }
 
 // Show flag on member list

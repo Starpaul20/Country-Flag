@@ -1,6 +1,6 @@
 ## INFORMATION ##
 
-Country-Flag (1.0) for MyBB 1.6
+Country Flag (1.0) for MyBB 1.6
 Created by: Starpaul20
 Copyright: ©2013
 License: GPL
