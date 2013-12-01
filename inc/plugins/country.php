@@ -81,7 +81,7 @@ function country_info()
 		"author"			=> "Starpaul20",
 		"authorsite"		=> "http://galaxiesrealm.com/index.php",
 		"version"			=> "1.0",
-		"guid"				=> "",
+		"guid"				=> "e6cce21cb726023bdb3c193ffcf75af1",
 		"compatibility"		=> "16*"
 	);
 }
