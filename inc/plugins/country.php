@@ -65,7 +65,6 @@ $plugins->add_hook("memberlist_user", "country_memberlist");
 
 $plugins->add_hook("admin_formcontainer_output_row", "country_user_editing");
 $plugins->add_hook("admin_user_users_edit_commit", "country_user_editing_commit");
-$plugins->add_hook("admin_tools_cache_begin", "country_datacache_class");
 $plugins->add_hook("admin_config_menu", "country_admin_menu");
 $plugins->add_hook("admin_config_action_handler", "country_admin_action_handler");
 $plugins->add_hook("admin_config_permissions", "country_admin_permissions");
@@ -715,39 +714,6 @@ function country_user_editing_commit()
 		"country" => (int)$mybb->input['country']
 	);
 	$db->update_query("users", $update_user, "uid='{$user['uid']}'");
-}
-
-// Rebuild country cache in Admin CP
-function country_datacache_class()
-{
-	global $cache;
-
-	if(class_exists('MyDatacache'))
-	{
-		class CountryDatacache extends MyDatacache
-		{
-			function update_countries()
-			{
-				update_countries();
-			}
-		}
-
-		$cache = null;
-		$cache = new CountryDatacache;
-	}
-	else
-	{
-		class MyDatacache extends datacache
-		{
-			function update_countries()
-			{
-				update_countries();
-			}
-		}
-
-		$cache = null;
-		$cache = new MyDatacache;
-	}
 }
 
 // Add country manage section in Admin CP
