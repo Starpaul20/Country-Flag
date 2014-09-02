@@ -393,7 +393,7 @@ function country_activate()
 {
 	global $db;
 	$query = $db->simple_select("settinggroups", "gid", "name='member'");
-	$gid = intval($db->fetch_field($query, "gid"));
+	$gid = $db->fetch_field($query, "gid");
 
 	// Insert settings
 	$insertarray = array(
@@ -403,7 +403,7 @@ function country_activate()
 		'optionscode' => 'yesno',
 		'value' => 0,
 		'disporder' => 39,
-		'gid' => intval($gid)
+		'gid' => (int)$gid
 	);
 	$db->insert_query("settings", $insertarray);
 
@@ -537,7 +537,7 @@ function country_run($post)
 	$post['usercountry'] = "";
 	if(!empty($post['country']))
 	{
-		$post['country'] = intval($post['country']);
+		$post['country'] = (int)$post['country'];
 		$country = $country_cache[$post['country']];
 
 		$country['name'] = $lang->parse($country['name']);
@@ -558,7 +558,7 @@ function country_profile()
 	$usercountry = "";
 	if($memprofile['country'])
 	{
-		$memprofile['country'] = intval($memprofile['country']);
+		$memprofile['country'] = (int)$memprofile['country'];
 		$country = $country_cache[$memprofile['country']];
 
 		$country['name'] = $lang->parse($country['name']);
@@ -601,9 +601,9 @@ function country_do_select()
 	global $db, $mybb;
 
 	$update_country = array(
-		"country" => intval($mybb->input['country'])
+		"country" => (int)$mybb->input['country']
 	);
-	$db->update_query("users", $update_country, "uid='".intval($mybb->user['uid'])."'");
+	$db->update_query("users", $update_country, "uid='".(int)$mybb->user['uid']."'");
 }
 
 // Country on registration
@@ -639,7 +639,7 @@ function country_do_register()
 	global $db, $mybb, $user_info;
 
 	$update_country = array(
-		"country" => intval($mybb->input['country'])
+		"country" => (int)$mybb->input['country']
 	);
 	$db->update_query("users", $update_country, "uid ='{$user_info['uid']}'");
 }
@@ -654,7 +654,7 @@ function country_memberlist($user)
 	$user['usercountry'] = "";
 	if(!empty($user['country']))
 	{
-		$user['country'] = intval($user['country']);
+		$user['country'] = (int)$user['country'];
 		$country = $country_cache[$user['country']];
 
 		$country['name'] = $lang->parse($country['name']);
@@ -693,7 +693,7 @@ function country_user_editing_commit()
 	global $db, $mybb, $user;
 
 	$update_user = array(
-		"country" => intval($mybb->input['country'])
+		"country" => (int)$mybb->input['country']
 	);
 	$db->update_query("users", $update_user, "uid='{$user['uid']}'");
 }
