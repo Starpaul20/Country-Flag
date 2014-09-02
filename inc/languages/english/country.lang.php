@@ -4,6 +4,9 @@
  * Copyright 2013 Starpaul20
  */
 
+$l['country_info_name'] = "Country Flag";
+$l['country_info_desc'] = "Allows users to display their countries flag on their posts.";
+
 $l['country'] = "Country";
 $l['your_country'] = "Your Country:";
 $l['country_description'] = "Please select the country you live in.";

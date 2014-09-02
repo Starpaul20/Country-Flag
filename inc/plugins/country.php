@@ -74,9 +74,12 @@ $plugins->add_hook("admin_tools_get_admin_log_action", "country_admin_adminlog")
 // The information that shows up on the plugin manager
 function country_info()
 {
+	global $lang;
+	$lang->load("country", true);
+
 	return array(
-		"name"				=> "Country Flag",
-		"description"		=> "Allows users to display their countries flag on their posts.",
+		"name"				=> $lang->country_info_name,
+		"description"		=> $lang->country_info_desc,
 		"website"			=> "http://galaxiesrealm.com/index.php",
 		"author"			=> "Starpaul20",
 		"authorsite"		=> "http://galaxiesrealm.com/index.php",
