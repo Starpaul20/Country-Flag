@@ -18,7 +18,7 @@ if(my_strpos($_SERVER['PHP_SELF'], 'usercp.php'))
 	{
 		$templatelist .= ',';
 	}
-	$templatelist .= 'usercp_profile_country_required,usercp_profile_country_optional';
+	$templatelist .= 'usercp_profile_country_required,usercp_profile_country_optional,usercp_profile_country_country';
 }
 
 if(my_strpos($_SERVER['PHP_SELF'], 'showthread.php'))
@@ -38,7 +38,7 @@ if(my_strpos($_SERVER['PHP_SELF'], 'member.php'))
 	{
 		$templatelist .= ',';
 	}
-	$templatelist .= 'global_country';
+	$templatelist .= 'global_country,member_register_country,member_register_country_country';
 }
 
 if(my_strpos($_SERVER['PHP_SELF'], 'memberlist.php'))
@@ -471,6 +471,15 @@ function country_activate()
 	$db->insert_query("templates", $insert_array);
 
 	$insert_array = array(
+		'title'		=> 'usercp_profile_country_country',
+		'template'	=> $db->escape_string('<option value="{$country[\'cid\']}"{$selected}>{$countryname}</option>'),
+		'sid'		=> '-1',
+		'version'	=> '',
+		'dateline'	=> TIME_NOW
+	);
+	$db->insert_query("templates", $insert_array);
+
+	$insert_array = array(
 		'title'		=> 'member_register_country',
 		'template'	=> $db->escape_string('<br />
 <fieldset class="trow2">
@@ -489,6 +498,15 @@ function country_activate()
 </tr>
 </table>
 </fieldset>'),
+		'sid'		=> '-1',
+		'version'	=> '',
+		'dateline'	=> TIME_NOW
+	);
+	$db->insert_query("templates", $insert_array);
+
+	$insert_array = array(
+		'title'		=> 'member_register_country_country',
+		'template'	=> $db->escape_string('<option value="{$country[\'cid\']}">{$countryname}</option>'),
 		'sid'		=> '-1',
 		'version'	=> '',
 		'dateline'	=> TIME_NOW
@@ -514,7 +532,7 @@ function country_deactivate()
 {
 	global $db;
 	$db->delete_query("settings", "name='countryrequired'");
-	$db->delete_query("templates", "title IN('postbit_country','global_country','usercp_profile_country_required','usercp_profile_country_optional','member_register_country')");
+	$db->delete_query("templates", "title IN('postbit_country','global_country','usercp_profile_country_required','usercp_profile_country_optional','usercp_profile_country_country','member_register_country','member_register_country_country')");
 	rebuild_settings();
 
 	include MYBB_ROOT."/inc/adminfunctions_templates.php";
@@ -534,7 +552,7 @@ function country_run($post)
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
-	$post['usercountry'] = "";
+	$post['usercountry'] = '';
 	if(!empty($post['country']))
 	{
 		$post['country'] = (int)$post['country'];
@@ -555,7 +573,7 @@ function country_profile()
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
-	$usercountry = "";
+	$usercountry = '';
 	if($memprofile['country'])
 	{
 		$memprofile['country'] = (int)$memprofile['country'];
@@ -578,12 +596,13 @@ function country_select()
 	{
 		$countryname = $lang->parse($country['name']);
 
-		$selected = "";
+		$selected = '';
 		if($user['country'] == $country['cid'])
 		{
 			$selected = "selected=\"selected\"";
 		}
-		$countryoptions .= "<option value=\"{$country['cid']}\"{$selected}>{$countryname}</option>\n";
+
+		eval("\$countryoptions .= \"".$templates->get("usercp_profile_country_country")."\";");
 	}
 
 	if($mybb->settings['countryrequired'] == 1)
@@ -612,6 +631,7 @@ function country_register()
 	global $db, $mybb, $lang, $templates, $theme, $countryfield, $blankoption, $please_select_country;
 	$lang->load("country");
 
+	$blankoption = '';
 	if($mybb->settings['countryrequired'] != 1)
 	{
 		$please_select_country = $lang->country_description;
@@ -620,7 +640,6 @@ function country_register()
 	else
 	{
 		$please_select_country = $lang->country_description_required;
-		$blankoption = "";
 	}
 
 	$query = $db->simple_select("countries", "*", "", array('order_by' => 'name', 'order_dir' => 'asc'));
@@ -628,7 +647,7 @@ function country_register()
 	{
 		$countryname = $lang->parse($country['name']);
 
-		$countryoptions .= "<option value=\"{$country['cid']}\">{$countryname}</option>\n";
+		eval("\$countryoptions .= \"".$templates->get("member_register_country_country")."\";");
 	}
 
 	eval("\$countryfield = \"".$templates->get("member_register_country")."\";");
@@ -651,7 +670,7 @@ function country_memberlist($user)
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
-	$user['usercountry'] = "";
+	$user['usercountry'] = '';
 	if(!empty($user['country']))
 	{
 		$user['country'] = (int)$user['country'];
