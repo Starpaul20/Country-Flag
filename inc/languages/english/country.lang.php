@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Country Flag
  * Copyright 2013 Starpaul20
