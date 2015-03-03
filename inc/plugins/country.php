@@ -95,14 +95,45 @@ function country_install()
 	country_uninstall();
 	$collation = $db->build_create_table_collation();
 
-	$db->write_query("CREATE TABLE ".TABLE_PREFIX."countries (
-				cid int(10) unsigned NOT NULL auto_increment,
+	switch($db->type)
+	{
+		case "pgsql":
+			$db->write_query("CREATE TABLE ".TABLE_PREFIX."countries (
+				bid serial,
 				name varchar(150) NOT NULL default '',
 				flag varchar(255) NOT NULL default '',
-				PRIMARY KEY(cid)
-			) ENGINE=MyISAM{$collation}");
+				PRIMARY KEY (cid)
+			);");
+			break;
+		case "sqlite":
+			$db->write_query("CREATE TABLE ".TABLE_PREFIX."countries (
+				cid INTEGER PRIMARY KEY,
+				name varchar(150) NOT NULL default '',
+				flag varchar(255) NOT NULL default ''
+			);");
+			break;
+		default:
+			$db->write_query("CREATE TABLE ".TABLE_PREFIX."countries (
+				cid int unsigned NOT NULL auto_increment,
+				name varchar(150) NOT NULL default '',
+				flag varchar(255) NOT NULL default '',
+				PRIMARY KEY (cid)
+			) ENGINE=MyISAM{$collation};");
+			break;
+	}
 
-	$db->add_column("users", "country", "int(10) unsigned NOT NULL default '0'");
+	switch($db->type)
+	{
+		case "pgsql":
+			$db->add_column("users", "country", "int NOT NULL default '0'");
+			break;
+		case "sqlite":
+			$db->add_column("users", "country", "int NOT NULL default '0'");
+			break;
+		default:
+			$db->add_column("users", "country", "int unsigned NOT NULL default '0'");
+			break;
+	}
 
 	$db->write_query("INSERT INTO ".TABLE_PREFIX."countries (cid, name, flag) VALUES
 (1, '<lang:country_afghanistan>', 'images/flags/afghanistan.png'),
