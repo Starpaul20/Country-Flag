@@ -651,7 +651,7 @@ function country_do_select()
 	global $db, $mybb;
 
 	$update_country = array(
-		"country" => (int)$mybb->input['country']
+		"country" => $mybb->get_input('country', MyBB::INPUT_INT)
 	);
 	$db->update_query("users", $update_country, "uid='".(int)$mybb->user['uid']."'");
 }
@@ -689,7 +689,7 @@ function country_do_register()
 	global $db, $mybb, $user_info;
 
 	$update_country = array(
-		"country" => (int)$mybb->input['country']
+		"country" => $mybb->get_input('country', MyBB::INPUT_INT)
 	);
 	$db->update_query("users", $update_country, "uid ='{$user_info['uid']}'");
 }
@@ -743,7 +743,7 @@ function country_user_editing_commit()
 	global $db, $mybb, $user;
 
 	$update_user = array(
-		"country" => (int)$mybb->input['country']
+		"country" => $mybb->get_input('country', MyBB::INPUT_INT)
 	);
 	$db->update_query("users", $update_user, "uid='{$user['uid']}'");
 }

@@ -90,7 +90,7 @@ if($mybb->input['action'] == "add")
 
 if($mybb->input['action'] == "edit")
 {
-	$query = $db->simple_select("countries", "*", "cid='".intval($mybb->input['cid'])."'");
+	$query = $db->simple_select("countries", "*", "cid='".$mybb->get_input('cid', MyBB::INPUT_INT)."'");
 	$country = $db->fetch_array($query);
 
 	if(!$country['cid'])
@@ -118,13 +118,13 @@ if($mybb->input['action'] == "edit")
 				'flag'	=> $db->escape_string($mybb->input['flag'])
 			);
 
-			$db->update_query("countries", $update_country, "cid='".intval($mybb->input['cid'])."'");
+			$db->update_query("countries", $update_country, "cid='{$country['cid']}'");
 
 			update_countries();
 
 			// Log admin action
 			$name = $lang->parse($mybb->input['name']);
-			log_admin_action($mybb->input['cid'], $name);
+			log_admin_action($country['cid'], $name);
 
 			flash_message($lang->success_country_updated, 'success');
 			admin_redirect('index.php?module=config-countries');
@@ -169,7 +169,7 @@ if($mybb->input['action'] == "edit")
 
 if($mybb->input['action'] == "delete")
 {
-	$query = $db->simple_select("countries", "*", "cid='".intval($mybb->input['cid'])."'");
+	$query = $db->simple_select("countries", "*", "cid='".$mybb->get_input('cid', MyBB::INPUT_INT)."'");
 	$country = $db->fetch_array($query);
 
 	if(!$country['cid'])
@@ -225,7 +225,7 @@ if(!$mybb->input['action'])
 
 	$page->output_nav_tabs($sub_tabs, 'manage_countries');
 
-	$pagenum = intval($mybb->input['page']);
+	$pagenum = $mybb->get_input('page', MyBB::INPUT_INT);
 	if($pagenum)
 	{
 		$start = ($pagenum - 1) * 20;
