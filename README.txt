@@ -1,6 +1,6 @@
 ## INFORMATION ##
 
-Country Flag (1.0) for MyBB 1.8
+Country Flag (1.1) for MyBB 1.8
 Created by: Starpaul20
 Copyright: ©2013
 License: GPL
@@ -26,4 +26,4 @@ The 'oldrelease' branch contains the 1.6 version of the plugin.
 
 ## UPDATING ##
 
-Any beta version should be reinstalled.
+If you're updating from any previous version, you must first deactivate the plugin (do not uninstall), upload all new files and reactivate.
