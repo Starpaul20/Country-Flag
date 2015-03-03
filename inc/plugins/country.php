@@ -99,7 +99,7 @@ function country_install()
 	{
 		case "pgsql":
 			$db->write_query("CREATE TABLE ".TABLE_PREFIX."countries (
-				bid serial,
+				cid serial,
 				name varchar(150) NOT NULL default '',
 				flag varchar(255) NOT NULL default '',
 				PRIMARY KEY (cid)
