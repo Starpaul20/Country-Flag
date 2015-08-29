@@ -440,6 +440,7 @@ function country_activate()
 
 	rebuild_settings();
 
+	// Insert templates
 	$insert_array = array(
 		'title'		=> 'postbit_country',
 		'template'	=> $db->escape_string('<br />{$lang->country}: <img src="{$country[\'flag\']}" alt="{$country[\'name\']}" title="{$country[\'name\']}" />'),
@@ -579,7 +580,7 @@ function country_deactivate()
 // Add country flag to postbit
 function country_run($post)
 {
-	global $db, $mybb, $lang, $templates, $cache, $country;
+	global $lang, $templates, $cache, $country;
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
@@ -619,7 +620,7 @@ function country_profile()
 // Editing country field in profile
 function country_select()
 {
-	global $db, $mybb, $lang, $templates, $cache, $requiredcountryfield, $optionalcountryfield, $user;
+	global $db, $mybb, $lang, $templates, $requiredcountryfield, $optionalcountryfield, $user;
 	$lang->load("country");
 
 	$query = $db->simple_select("countries", "*", "", array('order_by' => 'name', 'order_dir' => 'asc'));
@@ -768,7 +769,7 @@ function country_admin_action_handler($actions)
 
 function country_admin_permissions($admin_permissions)
 {
-	global $db, $mybb, $lang;
+	global $lang;
 	$lang->load("config_countries");
 
 	$admin_permissions['countries'] = $lang->can_manage_countries;
