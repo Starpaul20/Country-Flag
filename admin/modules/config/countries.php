@@ -197,7 +197,7 @@ if($mybb->input['action'] == "delete")
 
 		// Log admin action
 		$name = $lang->parse($country['name']);
-		log_admin_action($mybb->input['cid'], htmlspecialchars_uni($name));
+		log_admin_action($country['cid'], htmlspecialchars_uni($name));
 
 		flash_message($lang->success_country_deleted, 'success');
 		admin_redirect("index.php?module=config-countries");
