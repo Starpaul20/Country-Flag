@@ -1,3 +1,10 @@
+1.1.1 (August 29th, 2015)
+- Updated cache delete function
+- Use queried id instead of input
+- Use htmlspecialchars_uni when logging admin action
+- Added mention that language strings can be used in country names
+- Dropping useless globals
+
 1.1 (March 3rd, 2015)
 - Added PostgreSQL and SQLite support
 - Changed (int)$mybb->input to $mybb->get_input
