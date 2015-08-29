@@ -404,7 +404,7 @@ function country_is_installed()
 // This function runs when the plugin is uninstalled.
 function country_uninstall()
 {
-	global $db;
+	global $db, $cache;
 
 	if($db->table_exists("countries"))
 	{
@@ -416,7 +416,7 @@ function country_uninstall()
 		$db->drop_column("users", "country");
 	}
 
-	$db->delete_query("datacache", "title IN('countries')");
+	$cache->delete('countries');
 }
 
 // This function runs when the plugin is activated.
