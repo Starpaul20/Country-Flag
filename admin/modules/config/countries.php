@@ -41,7 +41,7 @@ if($mybb->input['action'] == "add")
 
 			// Log admin action
 			$name = $lang->parse($mybb->input['name']);
-			log_admin_action($cid, $name);
+			log_admin_action($cid, htmlspecialchars_uni($name));
 
 			flash_message($lang->success_country_added, 'success');
 			admin_redirect('index.php?module=config-countries');
@@ -124,7 +124,7 @@ if($mybb->input['action'] == "edit")
 
 			// Log admin action
 			$name = $lang->parse($mybb->input['name']);
-			log_admin_action($country['cid'], $name);
+			log_admin_action($country['cid'], htmlspecialchars_uni($name));
 
 			flash_message($lang->success_country_updated, 'success');
 			admin_redirect('index.php?module=config-countries');
@@ -197,7 +197,7 @@ if($mybb->input['action'] == "delete")
 
 		// Log admin action
 		$name = $lang->parse($country['name']);
-		log_admin_action($mybb->input['cid'], $name);
+		log_admin_action($mybb->input['cid'], htmlspecialchars_uni($name));
 
 		flash_message($lang->success_country_deleted, 'success');
 		admin_redirect("index.php?module=config-countries");
