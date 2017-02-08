@@ -244,7 +244,7 @@ if(!$mybb->input['action'])
 	$query = $db->simple_select("countries", "*", "", array('limit_start' => $start, 'limit' => 20, 'order_by' => 'name'));
 	while($country = $db->fetch_array($query))
 	{
-		if(my_strpos($country['flag'], "p://") || substr($country['flag'], 0, 1) == "/")
+		if(my_validate_url($country['flag'], true))
 		{
 			$image = $country['flag'];
 		}
