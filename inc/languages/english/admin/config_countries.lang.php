@@ -41,5 +41,3 @@ $l['confirm_country_deletion'] = "Are you sure you wish to delete this country?"
 $l['admin_log_config_countries_add'] = "Added country #{1} ({2})";
 $l['admin_log_config_countries_edit'] = "Edited country #{1} ({2})";
 $l['admin_log_config_countries_delete'] = "Deleted country #{1} ({2})";
-
-?>

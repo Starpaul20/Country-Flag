@@ -263,5 +263,3 @@ $l['country_western_sahara'] = "Western Sahara";
 $l['country_yemen'] = "Yemen";
 $l['country_zambia'] = "Zambia";
 $l['country_zimbabwe'] = "Zimbabwe";
-
-?>

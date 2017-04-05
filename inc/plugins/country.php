@@ -804,5 +804,3 @@ function update_countries()
 
 	$cache->update("countries", $countries);
 }
-
-?>
