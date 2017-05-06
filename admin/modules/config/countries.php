@@ -62,6 +62,11 @@ if($mybb->input['action'] == "add")
 		'description' => $lang->add_country_desc
 	);
 
+	$sub_tabs['add_multiple'] = array(
+		'title' => $lang->add_multiple_countries,
+		'link' => "index.php?module=config-countries&amp;action=add_multiple"
+	);
+
 	$page->output_nav_tabs($sub_tabs, 'add_country');
 
 	if($errors)
@@ -83,6 +88,201 @@ if($mybb->input['action'] == "add")
 
 	$form->output_submit_wrapper($buttons);
 
+	$form->end();
+
+	$page->output_footer();
+}
+
+if($mybb->input['action'] == "add_multiple")
+{
+	if($mybb->request_method == "post")
+	{
+		if($mybb->input['step'] == 1)
+		{
+			if(!trim($mybb->input['pathfolder']))
+			{
+				$errors[] = $lang->error_missing_path_multiple;
+			}
+
+			$path = $mybb->input['pathfolder'];
+			$dir = @opendir(MYBB_ROOT.$path);
+			if(!$dir)
+			{
+				$errors[] = $lang->error_invalid_path;
+			}
+
+			if(substr($path, -1, 1) !== "/")
+			{
+				$path .= "/";
+			}
+
+			$query = $db->simple_select("countries");
+
+			$aflags = array();
+			while($flag = $db->fetch_array($query))
+			{
+				$aflags[$flag['flag']] = 1;
+			}
+
+			$flags = array();
+			if(!$errors)
+			{
+				while($file = readdir($dir))
+				{
+					if($file != ".." && $file != ".")
+					{
+						$ext = get_extension($file);
+						if($ext == "gif" || $ext == "jpg" || $ext == "jpeg" || $ext == "png" || $ext == "bmp")
+						{
+							if(!$aflags[$path.$file])
+							{
+								$flags[] = $file;
+							}
+						}
+					}
+				}
+				closedir($dir);
+
+				if(count($flags) == 0)
+				{
+					$errors[] = $lang->error_no_flag_images;
+				}
+			}
+
+			// Check for errors again (from above statement)!
+			if(!$errors)
+			{
+				// We have no errors so let's proceed!
+				$page->add_breadcrumb_item($lang->add_multiple_countries);
+				$page->output_header($lang->countries." - ".$lang->add_multiple_countries);
+
+				$sub_tabs['manage_countries'] = array(
+					'title'	=> $lang->manage_countries,
+					'link' => "index.php?module=config-countries"
+				);
+
+				$sub_tabs['add_country'] = array(
+					'title'	=> $lang->add_country,
+					'link' => "index.php?module=config-countries&amp;action=add"
+				);
+
+				$sub_tabs['add_multiple'] = array(
+					'title' => $lang->add_multiple_countries,
+					'link' => "index.php?module=config-countries&amp;action=add_multiple",
+					'description' => $lang->add_multiple_countries_desc
+				);
+
+				$page->output_nav_tabs($sub_tabs, 'add_multiple');
+
+				$form = new Form("index.php?module=config-countries&amp;action=add_multiple", "post", "add_multiple");
+				echo $form->generate_hidden_field("step", "2");
+				echo $form->generate_hidden_field("pathfolder", $path);
+
+				$form_container = new FormContainer($lang->add_multiple_countries);
+				$form_container->output_row_header($lang->flag, array("class" => "align_center", 'width' => '10%'));
+				$form_container->output_row_header($lang->name);
+				$form_container->output_row_header($lang->add, array("class" => "align_center", 'width' => '5%'));
+
+				foreach($flags as $key => $file)
+				{
+					$ext = get_extension($file);
+					$find = str_replace(".".$ext, "", $file);
+					$name = ucfirst($find);
+
+					$form_container->output_cell("<img src=\"../".$path.$file."\" alt=\"\" /><br /><small>{$file}</small>", array("class" => "align_center", "width" => 1));
+					$form_container->output_cell($form->generate_text_box("name[{$file}]", $name, array('id' => 'name', 'style' => 'width: 98%')));
+					$form_container->output_cell($form->generate_check_box("include[{$file}]", 1, "", array('checked' => 1)), array("class" => "align_center"));
+					$form_container->construct_row();
+				}
+
+				if($form_container->num_rows() == 0)
+				{
+					flash_message($lang->error_no_flag_images, 'error');
+					admin_redirect("index.php?module=config-countries&action=add_multiple");
+				}
+
+				$form_container->end();
+
+				$buttons[] = $form->generate_submit_button($lang->save_countries);
+				$form->output_submit_wrapper($buttons);
+
+				$form->end();
+
+				$page->output_footer();
+				exit;
+			}
+		}
+		else
+		{
+			$path = $mybb->input['pathfolder'];
+			reset($mybb->input['include']);
+			$name = $mybb->input['name'];
+
+			if(empty($mybb->input['include']))
+			{
+				flash_message($lang->error_none_included_flags, 'error');
+				admin_redirect("index.php?module=config-countries&action=add_multiple");
+			}
+
+			foreach($mybb->input['include'] as $image => $insert)
+			{
+				if($insert)
+				{
+					$new_country = array(
+						'name' => $db->escape_string($name[$image]),
+						'flag' => $db->escape_string($path.$image)
+					);
+
+					$db->insert_query("countries", $new_country);
+				}
+			}
+
+			update_countries();
+
+			// Log admin action
+			log_admin_action();
+
+			flash_message($lang->success_countries_added, 'success');
+			admin_redirect("index.php?module=config-countries");
+		}
+	}
+
+	$page->add_breadcrumb_item($lang->add_multiple_countries);
+	$page->output_header($lang->countries." - ".$lang->add_multiple_countries);
+
+	$sub_tabs['manage_countries'] = array(
+		'title'	=> $lang->manage_countries,
+		'link'	=> "index.php?module=config-countries"
+	);
+
+	$sub_tabs['add_country'] = array(
+		'title'	=> $lang->add_country,
+		'link'	=> "index.php?module=config-countries&amp;action=add"
+	);
+
+	$sub_tabs['add_multiple'] = array(
+		'title' => $lang->add_multiple_countries,
+		'link' => "index.php?module=config-countries&amp;action=add_multiple",
+		'description'	=> $lang->add_multiple_countries_desc
+	);
+
+	$page->output_nav_tabs($sub_tabs, 'add_multiple');
+
+	$form = new Form("index.php?module=config-countries&amp;action=add_multiple", "post", "add_multiple");
+	echo $form->generate_hidden_field("step", "1");
+
+	if($errors)
+	{
+		$page->output_inline_error($errors);
+	}
+
+	$form_container = new FormContainer($lang->add_multiple_countries);
+	$form_container->output_row($lang->path_to_flags." <em>*</em>", $lang->path_to_flags_desc, $form->generate_text_box('pathfolder', $mybb->input['pathfolder'], array('id' => 'pathfolder')), 'pathfolder');
+	$form_container->end();
+
+	$buttons[] = $form->generate_submit_button($lang->show_countries);
+
+	$form->output_submit_wrapper($buttons);
 	$form->end();
 
 	$page->output_footer();
@@ -221,6 +421,11 @@ if(!$mybb->input['action'])
 	$sub_tabs['add_country'] = array(
 		'title'	=> $lang->add_country,
 		'link' => "index.php?module=config-countries&amp;action=add"
+	);
+
+	$sub_tabs['add_multiple'] = array(
+		'title' => $lang->add_multiple_countries,
+		'link' => "index.php?module=config-countries&amp;action=add_multiple"
 	);
 
 	$page->output_nav_tabs($sub_tabs, 'manage_countries');
