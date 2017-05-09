@@ -12,6 +12,8 @@ $l['your_country'] = "Your Country:";
 $l['country_description'] = "Please select the country you live in.";
 $l['country_description_required'] = "Please select the country you live in. This field is required.";
 $l['not_specified'] = "Not Specified";
+$l['missing_country'] = "You did not select a country. Please select one.";
+$l['invalid_country'] = "You did not select a valid country.";
 
 $l['country_afghanistan'] = "Afghanistan";
 $l['country_aland_islands'] = "Aland Islands";

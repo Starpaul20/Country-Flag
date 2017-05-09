@@ -110,7 +110,8 @@ $plugins->add_hook("member_profile_end", "country_profile");
 $plugins->add_hook("usercp_profile_start", "country_select");
 $plugins->add_hook("usercp_do_profile_end", "country_do_select");
 $plugins->add_hook("member_register_start", "country_register");
-$plugins->add_hook("member_do_register_end", "country_do_register");
+$plugins->add_hook("datahandler_user_validate", "country_validate");
+$plugins->add_hook("datahandler_user_insert_end", "country_do_register");
 $plugins->add_hook("memberlist_user", "country_memberlist");
 
 $plugins->add_hook("admin_formcontainer_output_row", "country_user_editing");
@@ -521,6 +522,7 @@ function country_activate()
 <tr>
 <td>
 <select name="country">
+<option value="">{$lang->not_specified}</option>
 {$countryoptions}
 </select>
 </td>
@@ -541,7 +543,7 @@ function country_activate()
 <tr>
 <td colspan="3">
 <select name="country">
-<option value="">&nbsp;</option>
+<option value="">{$lang->not_specified}</option>
 {$countryoptions}
 </select>
 </td>
@@ -573,7 +575,7 @@ function country_activate()
 <tr>
 <td colspan="2">
 <select name="country">
-{$blankoption}
+<option value="">{$lang->not_specified}</option>
 {$countryoptions}
 </select>
 </td>
@@ -710,14 +712,12 @@ function country_do_select()
 // Country on registration
 function country_register()
 {
-	global $db, $mybb, $lang, $templates, $theme, $countryfield, $blankoption, $please_select_country;
+	global $db, $mybb, $lang, $templates, $theme, $countryfield, $please_select_country;
 	$lang->load("country");
 
-	$blankoption = '';
 	if($mybb->settings['countryrequired'] != 1)
 	{
 		$please_select_country = $lang->country_description;
-		$blankoption = "<option value=\"\">&nbsp;</option>";
 	}
 	else
 	{
@@ -735,14 +735,43 @@ function country_register()
 	eval("\$countryfield = \"".$templates->get("member_register_country")."\";");
 }
 
-function country_do_register()
+// Validate country
+function country_validate($user)
 {
-	global $db, $mybb, $user_info;
+	global $mybb, $lang, $cache;
+	$lang->load("country", true);
+	$country_cache = $cache->read("countries");
+
+	$cid = $mybb->get_input('country', MyBB::INPUT_INT);
+
+	if($mybb->settings['countryrequired'] == 1 && $cid == 0)
+	{
+		$user->set_error($lang->missing_country);
+	}
+
+	if($cid != 0)
+	{
+		$country = $country_cache[$cid];
+
+		if(!$country)
+		{
+			$user->set_error($lang->invalid_country);
+		}
+	}
+
+	return $user;
+}
+
+function country_do_register($user)
+{
+	global $db, $mybb;
 
 	$update_country = array(
 		"country" => $mybb->get_input('country', MyBB::INPUT_INT)
 	);
-	$db->update_query("users", $update_country, "uid ='{$user_info['uid']}'");
+	$db->update_query("users", $update_country, "uid ='{$user->uid}'");
+
+	return $user;
 }
 
 // Show flag on member list
