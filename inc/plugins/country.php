@@ -672,11 +672,11 @@ function country_profile()
 // Editing country field in profile
 function country_select()
 {
-	global $db, $mybb, $lang, $templates, $requiredcountryfield, $optionalcountryfield, $user;
+	global $db, $mybb, $lang, $templates, $requiredcountryfield, $optionalcountryfield, $user, $cache;
 	$lang->load("country");
+	$country_cache = $cache->read("countries");
 
-	$query = $db->simple_select("countries", "*", "", array('order_by' => 'name', 'order_dir' => 'asc'));
-	while($country = $db->fetch_array($query))
+	foreach($country_cache as $cid => $country)
 	{
 		$countryname = $lang->parse($country['name']);
 
@@ -712,8 +712,9 @@ function country_do_select()
 // Country on registration
 function country_register()
 {
-	global $db, $mybb, $lang, $templates, $theme, $countryfield, $please_select_country;
+	global $db, $mybb, $lang, $templates, $theme, $cache, $countryfield, $please_select_country;
 	$lang->load("country");
+	$country_cache = $cache->read("countries");
 
 	if($mybb->settings['countryrequired'] != 1)
 	{
@@ -724,8 +725,7 @@ function country_register()
 		$please_select_country = $lang->country_description_required;
 	}
 
-	$query = $db->simple_select("countries", "*", "", array('order_by' => 'name', 'order_dir' => 'asc'));
-	while($country = $db->fetch_array($query))
+	foreach($country_cache as $cid => $country)
 	{
 		$countryname = $lang->parse($country['name']);
 
@@ -798,14 +798,14 @@ function country_memberlist($user)
 // Admin CP user editing
 function country_user_editing($above)
 {
-	global $db, $mybb, $lang, $form;
+	global $db, $mybb, $lang, $form, $cache;
 	$lang->load("country", true);
 
 	if($above['title'] == $lang->other_options && $lang->other_options)
 	{
+		$country_cache = $cache->read("countries");
 		$options[0] = "&nbsp";
-		$query = $db->simple_select("countries", "*", "", array('order_by' => 'name', 'order_dir' => 'asc'));
-		while($country = $db->fetch_array($query))
+		foreach($country_cache as $cid => $country)
 		{
 			$country['name'] = $lang->parse($country['name']);
 			$options[$country['cid']] = $country['name'];
@@ -875,7 +875,7 @@ function update_countries()
 
 	$countries = array();
 
-	$query = $db->simple_select("countries", "cid, name, flag");
+	$query = $db->simple_select("countries", "cid, name, flag", "", array('order_by' => 'name', 'order_dir' => 'asc'));
 	while($country = $db->fetch_array($query))
 	{
 		$countries[$country['cid']] = $country;
