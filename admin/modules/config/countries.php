@@ -80,7 +80,7 @@ if($mybb->input['action'] == "add")
 
 	$form = new Form("index.php?module=config-countries&amp;action=add", "post", "add");
 	$form_container = new FormContainer($lang->add_country);
-	$form_container->output_row($lang->name." <em>*</em>", htmlspecialchars_uni($lang->name_desc), $form->generate_text_box('name', $mybb->input['name'], array('id' => 'name')), 'name');
+	$form_container->output_row($lang->name." <em>*</em>", htmlspecialchars_uni($lang->country_name_desc), $form->generate_text_box('name', $mybb->input['name'], array('id' => 'name')), 'name');
 	$form_container->output_row($lang->flag_path." <em>*</em>", $lang->flag_path_desc, $form->generate_text_box('flag', $mybb->input['flag'], array('id' => 'flag')), 'flag');
 	$form_container->end();
 
@@ -355,7 +355,7 @@ if($mybb->input['action'] == "edit")
 	}
 
 	$form_container = new FormContainer($lang->edit_country);
-	$form_container->output_row($lang->name." <em>*</em>", htmlspecialchars_uni($lang->name_desc), $form->generate_text_box('name', $mybb->input['name'], array('id' => 'name')), 'name');
+	$form_container->output_row($lang->name." <em>*</em>", htmlspecialchars_uni($lang->country_name_desc), $form->generate_text_box('name', $mybb->input['name'], array('id' => 'name')), 'name');
 	$form_container->output_row($lang->flag_path." <em>*</em>", $lang->flag_path_desc, $form->generate_text_box('flag', $mybb->input['flag'], array('id' => 'flag')), 'flag');
 	$form_container->end();
 

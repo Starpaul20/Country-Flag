@@ -16,7 +16,7 @@ $l['edit_country_desc'] = "Here you can edit a country.";
 $l['manage_countries'] = "Manage Countries";
 $l['manage_countries_desc'] = "This section allows you to edit, delete, and manage your countries.";
 
-$l['name_desc'] = "This is the name for the country. Use <lang:language_string> to allow country name to be translated (language string must be added to country.lang.php file).";
+$l['country_name_desc'] = "This is the name for the country. Use <lang:language_string> to allow country name to be translated (language string must be added to country.lang.php file).";
 $l['flag_path'] = "Flag Path";
 $l['flag_path_desc'] = "This is the path to the flag icon image.";
 $l['save_country'] = "Save Country";
