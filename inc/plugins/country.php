@@ -658,7 +658,7 @@ function country_profile()
 	$country_cache = $cache->read("countries");
 
 	$usercountry = '';
-	if($memprofile['country'])
+	if(!empty($memprofile['country']))
 	{
 		$memprofile['country'] = (int)$memprofile['country'];
 		$country = $country_cache[$memprofile['country']];
@@ -676,6 +676,7 @@ function country_select()
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
+	$countryoptions = '';
 	foreach($country_cache as $cid => $country)
 	{
 		$countryname = $lang->parse($country['name']);
@@ -689,6 +690,7 @@ function country_select()
 		eval("\$countryoptions .= \"".$templates->get("usercp_profile_country_country")."\";");
 	}
 
+	$requiredcountryfield = $optionalcountryfield = '';
 	if($mybb->settings['countryrequired'] == 1)
 	{
 		eval("\$requiredcountryfield = \"".$templates->get("usercp_profile_country_required")."\";");
@@ -712,7 +714,7 @@ function country_do_select()
 // Country on registration
 function country_register()
 {
-	global $db, $mybb, $lang, $templates, $theme, $cache, $countryfield, $please_select_country;
+	global $mybb, $lang, $templates, $theme, $cache, $countryfield;
 	$lang->load("country");
 	$country_cache = $cache->read("countries");
 
@@ -725,6 +727,7 @@ function country_register()
 		$please_select_country = $lang->country_description_required;
 	}
 
+	$countryoptions = $countryfield = '';
 	foreach($country_cache as $cid => $country)
 	{
 		$countryname = $lang->parse($country['name']);
@@ -798,7 +801,7 @@ function country_memberlist($user)
 // Admin CP user editing
 function country_user_editing($above)
 {
-	global $db, $mybb, $lang, $form, $cache;
+	global $mybb, $lang, $form, $cache;
 	$lang->load("country", true);
 
 	if($above['title'] == $lang->other_options && $lang->other_options)
