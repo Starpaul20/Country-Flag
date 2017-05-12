@@ -604,11 +604,7 @@ function country_activate()
 	find_replace_templatesets("member_register", "#".preg_quote('{$requiredfields}')."#i", '{$countryfield}{$requiredfields}');
 	find_replace_templatesets("member_profile", "#".preg_quote('</strong></span>')."#i", '</strong></span>{$usercountry}');
 	find_replace_templatesets("usercp_profile", "#".preg_quote('{$requiredfields}')."#i", '{$requiredcountryfield}{$requiredfields}');
-	find_replace_templatesets("usercp_profile", "#".preg_quote('</table>
-</fieldset>
-{$customfields}')."#i", '{$optionalcountryfield}</table>
-</fieldset>
-{$customfields}');
+	find_replace_templatesets("usercp_profile", "#".preg_quote('{$website}')."#i", '{$website}{$optionalcountryfield}');
 }
 
 // This function runs when the plugin is deactivated.
