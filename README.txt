@@ -1,6 +1,6 @@
 ## INFORMATION ##
 
-Country Flag (1.1.1) for MyBB 1.8
+Country Flag (1.2) for MyBB 1.8
 Created by: Starpaul20
 Copyright: ©2013
 License: GPL
@@ -11,7 +11,7 @@ A flag can be set by a user during registration and when editing their profile. 
 
 Flag icons are by Osiris_TSGK. A full set of flag icons can be downloaded here: http://forum.tsgk.com/viewtopic.php?t=4921
 
-The setting for this plugin are located under the 'User Registration and Profile Options' setting group. This plugin offers full language support.
+The setting for this plugin are located under the 'Login and Registration Options' setting group. This plugin offers full language support.
 
 The 'oldrelease' branch contains the 1.6 version of the plugin.
 

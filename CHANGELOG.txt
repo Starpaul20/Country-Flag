@@ -1,3 +1,15 @@
+1.2 (May 12th, 2017)
+- Use my_validate_url function
+- Removed PHP closing tags
+- Use THIS_SCRIPT for template caching
+- Added ability to add multiple countries at once (Issue #1)
+- Caching templates in all postbit areas
+- Bug: Added validation of selected country (Issue #2)
+- Use cache instead of query
+- Updated find_replace_templatesets check for User CP
+- Indented templates
+- Variable cleanup
+
 1.1.1 (August 29th, 2015)
 - Updated cache delete function
 - Use queried id instead of input
