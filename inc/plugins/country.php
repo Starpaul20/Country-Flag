@@ -513,19 +513,19 @@ function country_activate()
 	$insert_array = array(
 		'title'		=> 'usercp_profile_country_required',
 		'template'	=> $db->escape_string('<tr>
-<td>
-<a title="{$lang->country_description}" style="text-decoration: none;">{$lang->country}</a>:
-<br />
-<span class="smalltext">{$lang->country_description}</span>
-</td>
+	<td>
+		<span>{$lang->country}</span>:
+		<br />
+		<span class="smalltext">{$lang->country_description}</span>
+	</td>
 </tr>
 <tr>
-<td>
-<select name="country">
-<option value="">{$lang->not_specified}</option>
-{$countryoptions}
-</select>
-</td>
+	<td>
+		<select name="country">
+			<option value="">{$lang->not_specified}</option>
+			{$countryoptions}
+		</select>
+	</td>
 </tr>'),
 		'sid'		=> '-1',
 		'version'	=> '',
@@ -536,17 +536,17 @@ function country_activate()
 	$insert_array = array(
 		'title'		=> 'usercp_profile_country_optional',
 		'template'	=> $db->escape_string('<tr>
-<td colspan="3">
-<span class="smalltext">{$lang->your_country}</span>
-</td>
+	<td colspan="3">
+		<span class="smalltext">{$lang->your_country}</span>
+	</td>
 </tr>
 <tr>
-<td colspan="3">
-<select name="country">
-<option value="">{$lang->not_specified}</option>
-{$countryoptions}
-</select>
-</td>
+	<td colspan="3">
+		<select name="country">
+			<option value="">{$lang->not_specified}</option>
+			{$countryoptions}
+		</select>
+	</td>
 </tr>'),
 		'sid'		=> '-1',
 		'version'	=> '',
@@ -567,20 +567,20 @@ function country_activate()
 		'title'		=> 'member_register_country',
 		'template'	=> $db->escape_string('<br />
 <fieldset class="trow2">
-<legend><strong>{$lang->country}</strong></legend>
-<table cellspacing="0" cellpadding="{$theme[\'tablespace\']}">
-<tr>
-<td colspan="2"><span class="smalltext">{$please_select_country}</span></td>
-</tr>
-<tr>
-<td colspan="2">
-<select name="country">
-<option value="">{$lang->not_specified}</option>
-{$countryoptions}
-</select>
-</td>
-</tr>
-</table>
+	<legend><strong>{$lang->country}</strong></legend>
+	<table cellspacing="0" cellpadding="{$theme[\'tablespace\']}">
+		<tr>
+			<td colspan="2"><span class="smalltext">{$please_select_country}</span></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<select name="country">
+					<option value="">{$lang->not_specified}</option>
+					{$countryoptions}
+				</select>
+			</td>
+		</tr>
+	</table>
 </fieldset>'),
 		'sid'		=> '-1',
 		'version'	=> '',
