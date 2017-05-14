@@ -743,7 +743,7 @@ function country_validate($user)
 
 	$cid = $mybb->get_input('country', MyBB::INPUT_INT);
 
-	if($mybb->settings['countryrequired'] == 1 && $cid == 0)
+	if(($user->method == "insert" || $mybb->input['action'] == "do_profile") && $mybb->settings['countryrequired'] == 1 && $cid == 0)
 	{
 		$user->set_error($lang->missing_country);
 	}
