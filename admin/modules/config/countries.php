@@ -80,8 +80,8 @@ if($mybb->input['action'] == "add")
 
 	$form = new Form("index.php?module=config-countries&amp;action=add", "post", "add");
 	$form_container = new FormContainer($lang->add_country);
-	$form_container->output_row($lang->name." <em>*</em>", htmlspecialchars_uni($lang->country_name_desc), $form->generate_text_box('name', $mybb->input['name'], array('id' => 'name')), 'name');
-	$form_container->output_row($lang->flag_path." <em>*</em>", $lang->flag_path_desc, $form->generate_text_box('flag', $mybb->input['flag'], array('id' => 'flag')), 'flag');
+	$form_container->output_row($lang->name." <em>*</em>", htmlspecialchars_uni($lang->country_name_desc), $form->generate_text_box('name', $mybb->get_input('name'), array('id' => 'name')), 'name');
+	$form_container->output_row($lang->flag_path." <em>*</em>", $lang->flag_path_desc, $form->generate_text_box('flag', $mybb->get_input('flag'), array('id' => 'flag')), 'flag');
 	$form_container->end();
 
 	$buttons[] = $form->generate_submit_button($lang->save_country);
@@ -134,7 +134,7 @@ if($mybb->input['action'] == "add_multiple")
 						$ext = get_extension($file);
 						if($ext == "gif" || $ext == "jpg" || $ext == "jpeg" || $ext == "png" || $ext == "bmp")
 						{
-							if(!$aflags[$path.$file])
+							if(!isset($aflags[$path.$file]))
 							{
 								$flags[] = $file;
 							}
@@ -277,7 +277,7 @@ if($mybb->input['action'] == "add_multiple")
 	}
 
 	$form_container = new FormContainer($lang->add_multiple_countries);
-	$form_container->output_row($lang->path_to_flags." <em>*</em>", $lang->path_to_flags_desc, $form->generate_text_box('pathfolder', $mybb->input['pathfolder'], array('id' => 'pathfolder')), 'pathfolder');
+	$form_container->output_row($lang->path_to_flags." <em>*</em>", $lang->path_to_flags_desc, $form->generate_text_box('pathfolder', $mybb->get_input('pathfolder'), array('id' => 'pathfolder')), 'pathfolder');
 	$form_container->end();
 
 	$buttons[] = $form->generate_submit_button($lang->show_countries);
