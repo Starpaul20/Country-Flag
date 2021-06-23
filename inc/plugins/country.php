@@ -600,7 +600,7 @@ function country_activate()
 	);
 	$db->insert_query("templates", $insert_array);
 
-	include MYBB_ROOT."/inc/adminfunctions_templates.php";
+	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
 	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'usercountry\']}');
 	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'user_details\']}')."#i", '{$post[\'user_details\']}{$post[\'usercountry\']}');
 	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'profilelink\']}')."#i", '{$user[\'profilelink\']}{$user[\'usercountry\']}');
@@ -618,7 +618,7 @@ function country_deactivate()
 	$db->delete_query("templates", "title IN('postbit_country','global_country','usercp_profile_country_required','usercp_profile_country_optional','usercp_profile_country_country','member_register_country','member_register_country_country')");
 	rebuild_settings();
 
-	include MYBB_ROOT."/inc/adminfunctions_templates.php";
+	require_once MYBB_ROOT."/inc/adminfunctions_templates.php";
 	find_replace_templatesets("postbit", "#".preg_quote('{$post[\'usercountry\']}')."#i", '', 0);
 	find_replace_templatesets("postbit_classic", "#".preg_quote('{$post[\'usercountry\']}')."#i", '', 0);
 	find_replace_templatesets("memberlist_user", "#".preg_quote('{$user[\'usercountry\']}')."#i", '', 0);
