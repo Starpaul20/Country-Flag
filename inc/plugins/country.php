@@ -117,7 +117,7 @@ $plugins->add_hook("datahandler_user_validate", "country_validate");
 $plugins->add_hook("datahandler_user_insert_end", "country_do_register");
 $plugins->add_hook("memberlist_user", "country_memberlist");
 
-$plugins->add_hook("admin_formcontainer_output_row", "country_user_editing");
+$plugins->add_hook("admin_user_users_edit_other_options", "country_user_editing");
 $plugins->add_hook("admin_user_users_edit_commit", "country_user_editing_commit");
 $plugins->add_hook("admin_config_menu", "country_admin_menu");
 $plugins->add_hook("admin_config_action_handler", "country_admin_action_handler");
@@ -798,25 +798,22 @@ function country_memberlist($user)
 }
 
 // Admin CP user editing
-function country_user_editing($above)
+function country_user_editing($other_options)
 {
 	global $mybb, $lang, $form, $cache;
 	$lang->load("country", true);
 
-	if($above['title'] == $lang->other_options && $lang->other_options)
+	$country_cache = $cache->read("countries");
+	$options[0] = "&nbsp";
+	foreach($country_cache as $cid => $country)
 	{
-		$country_cache = $cache->read("countries");
-		$options[0] = "&nbsp";
-		foreach($country_cache as $cid => $country)
-		{
-			$country['name'] = $lang->parse($country['name']);
-			$options[$country['cid']] = $country['name'];
-		}
-
-		$above['content'] .="<div class=\"user_settings_bit\"><label for=\"country\">{$lang->country}:</label><br />".$form->generate_select_box('country', $options, $mybb->input['country'], array('id' => 'country'))."</div>";
+		$country['name'] = $lang->parse($country['name']);
+		$options[$country['cid']] = $country['name'];
 	}
 
-	return $above;
+	$other_options[] = "<label for=\"country\">{$lang->country}:</label><br />".$form->generate_select_box('country', $options, $mybb->input['country'], array('id' => 'country'));
+
+	return $other_options;
 }
 
 // Admin CP user editing
