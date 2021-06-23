@@ -11,94 +11,97 @@ if(!defined("IN_MYBB"))
 }
 
 // Neat trick for caching our custom template(s)
-if(THIS_SCRIPT == 'usercp.php')
+if(defined('THIS_SCRIPT'))
 {
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'usercp.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'usercp_profile_country_required,usercp_profile_country_optional,usercp_profile_country_country';
 	}
-	$templatelist .= 'usercp_profile_country_required,usercp_profile_country_optional,usercp_profile_country_country';
-}
 
-if(THIS_SCRIPT == 'showthread.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'showthread.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'postbit_country';
 	}
-	$templatelist .= 'postbit_country';
-}
 
-if(THIS_SCRIPT == 'private.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'private.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'postbit_country';
 	}
-	$templatelist .= 'postbit_country';
-}
 
-if(THIS_SCRIPT == 'announcements.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'announcements.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'postbit_country';
 	}
-	$templatelist .= 'postbit_country';
-}
 
-if(THIS_SCRIPT == 'newthread.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'newthread.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'postbit_country';
 	}
-	$templatelist .= 'postbit_country';
-}
 
-if(THIS_SCRIPT == 'newreply.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'newreply.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'postbit_country';
 	}
-	$templatelist .= 'postbit_country';
-}
 
-if(THIS_SCRIPT == 'editpost.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'editpost.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'postbit_country';
 	}
-	$templatelist .= 'postbit_country';
-}
 
-if(THIS_SCRIPT == 'member.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'member.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'global_country,member_register_country,member_register_country_country';
 	}
-	$templatelist .= 'global_country,member_register_country,member_register_country_country';
-}
 
-if(THIS_SCRIPT == 'memberlist.php')
-{
-	global $templatelist;
-	if(isset($templatelist))
+	if(THIS_SCRIPT == 'memberlist.php')
 	{
-		$templatelist .= ',';
+		global $templatelist;
+		if(isset($templatelist))
+		{
+			$templatelist .= ',';
+		}
+		$templatelist .= 'global_country';
 	}
-	$templatelist .= 'global_country';
 }
 
 // Tell MyBB when to run the hooks
